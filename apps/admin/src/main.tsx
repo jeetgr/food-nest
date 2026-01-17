@@ -4,7 +4,8 @@ import ReactDOM from "react-dom/client";
 
 import Loader from "./components/loader";
 import { routeTree } from "./routeTree.gen";
-import { orpc, queryClient } from "./utils/orpc";
+import { orpc } from "./utils/orpc";
+import { queryClient } from "./utils/tanstack-query";
 
 const router = createRouter({
   routeTree,
@@ -12,7 +13,9 @@ const router = createRouter({
   defaultPendingComponent: () => <Loader />,
   context: { orpc, queryClient },
   Wrap: function WrapComponent({ children }: { children: React.ReactNode }) {
-    return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
+    return (
+      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    );
   },
 });
 

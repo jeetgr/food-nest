@@ -141,6 +141,7 @@ export const ordersRouter = {
           items: { with: { food: true } },
           address: true,
           payment: true,
+          user: true,
         },
       });
 
@@ -162,17 +163,57 @@ export const ordersRouter = {
       });
     }),
 
-  listAll: adminProcedure.route({ method: "GET" }).handler(async () => {
-    return db.query.order.findMany({
-      orderBy: [desc(order.createdAt)],
-      with: {
-        user: true,
-        items: { with: { food: true } },
-        address: true,
-        payment: true,
-      },
-    });
-  }),
+  listAll: adminProcedure
+    .route({ method: "GET" })
+    .input(
+      z.object({
+        page: z.number().int().min(1).default(1),
+        limit: z.number().int().min(1).max(50).default(10),
+        status: z
+          .enum([
+            "all",
+            "pending",
+            "confirmed",
+            "preparing",
+            "ready",
+            "out_for_delivery",
+            "delivered",
+            "cancelled",
+          ])
+          .default("all"),
+      }),
+    )
+    .handler(async ({ input }) => {
+      const { page, limit, status } = input;
+      const offset = (page - 1) * limit;
+
+      const whereClause =
+        status !== "all" ? eq(order.status, status) : undefined;
+
+      const [total, items] = await Promise.all([
+        db.$count(order, whereClause),
+        db.query.order.findMany({
+          where: whereClause,
+          orderBy: [desc(order.createdAt)],
+          limit,
+          offset,
+          with: {
+            user: true,
+            items: { with: { food: true } },
+            address: true,
+            payment: true,
+          },
+        }),
+      ]);
+
+      return {
+        items,
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      };
+    }),
 
   updateStatus: adminProcedure
     .input(

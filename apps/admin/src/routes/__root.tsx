@@ -1,17 +1,16 @@
-import type { AppRouterClient } from "@foodnest/api/routers/index";
 import type { QueryClient } from "@tanstack/react-query";
 
-import { createORPCClient } from "@orpc/client";
-import { createTanstackQueryUtils } from "@orpc/tanstack-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { HeadContent, Outlet, createRootRouteWithContext } from "@tanstack/react-router";
+import {
+  HeadContent,
+  Outlet,
+  createRootRouteWithContext,
+} from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
-import { useState } from "react";
 
-import Header from "@/components/header";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
-import { link, orpc } from "@/utils/orpc";
+import { orpc } from "@/utils/orpc";
 
 import "../index.css";
 
@@ -25,7 +24,7 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
   head: () => ({
     meta: [
       {
-        title: "foodnest",
+        title: "Food Nest",
       },
       {
         name: "description",
@@ -42,9 +41,6 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
 });
 
 function RootComponent() {
-  const [client] = useState<AppRouterClient>(() => createORPCClient(link));
-  const [orpcUtils] = useState(() => createTanstackQueryUtils(client));
-
   return (
     <>
       <HeadContent />
@@ -54,10 +50,10 @@ function RootComponent() {
         disableTransitionOnChange
         storageKey="vite-ui-theme"
       >
-        <div className="grid grid-rows-[auto_1fr] h-svh">
-          <Header />
-          <Outlet />
-        </div>
+        {/* <div className="grid grid-rows-[auto_1fr] h-svh">
+          <Header /> */}
+        <Outlet />
+        {/* </div> */}
         <Toaster richColors />
       </ThemeProvider>
       <TanStackRouterDevtools position="bottom-left" />

@@ -1,5 +1,12 @@
 import { relations } from "drizzle-orm";
-import { pgTable, text, integer, boolean, numeric, index } from "drizzle-orm/pg-core";
+import {
+  pgTable,
+  text,
+  integer,
+  boolean,
+  numeric,
+  index,
+} from "drizzle-orm/pg-core";
 import { primaryId, timestamps } from "./common";
 import { category } from "./categories";
 import { orderItem } from "./orders";
@@ -12,7 +19,7 @@ export const food = pgTable(
     slug: text("slug").notNull().unique(),
     description: text("description"),
     price: numeric("price", { precision: 10, scale: 2 }).notNull(),
-    image: text("image"),
+    image: text("image").notNull(),
     categoryId: text("category_id")
       .notNull()
       .references(() => category.id, { onDelete: "restrict" }),

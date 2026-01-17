@@ -1,8 +1,17 @@
 import { ORPCError, os } from "@orpc/server";
 
 import type { Context } from "./context";
+import z from "zod";
 
-export const o = os.$context<Context>();
+export const o = os.$context<Context>().errors({
+  INPUT_VALIDATION_FAILED: {
+    status: 422,
+    data: z.object({
+      formErrors: z.array(z.string()),
+      fieldErrors: z.record(z.string(), z.array(z.string()).optional()),
+    }),
+  },
+});
 
 export const publicProcedure = o;
 

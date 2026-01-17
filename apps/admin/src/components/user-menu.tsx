@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "@tanstack/react-router";
+import { useNavigate } from "@tanstack/react-router";
 
 import {
   DropdownMenu,
@@ -12,34 +12,27 @@ import {
 import { authClient } from "@/lib/auth-client";
 
 import { Button } from "./ui/button";
-import { Skeleton } from "./ui/skeleton";
+import { useSession } from "@/hooks/use-session";
 
 export default function UserMenu() {
   const navigate = useNavigate();
-  const { data: session, isPending } = authClient.useSession();
-
-  if (isPending) {
-    return <Skeleton className="h-9 w-24" />;
-  }
-
-  if (!session) {
-    return (
-      <Link to="/login">
-        <Button variant="outline">Sign In</Button>
-      </Link>
-    );
-  }
+  const user = useSession({
+    select: ({ session }) => ({
+      name: session.user.name,
+      email: session.user.email,
+    }),
+  });
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger render={<Button variant="outline" />}>
-        {session.user.name}
+        {user.name}
       </DropdownMenuTrigger>
       <DropdownMenuContent className="bg-card">
         <DropdownMenuGroup>
           <DropdownMenuLabel>My Account</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>{session.user.email}</DropdownMenuItem>
+          <DropdownMenuItem>{user.email}</DropdownMenuItem>
           <DropdownMenuItem
             variant="destructive"
             onClick={() => {
@@ -47,7 +40,7 @@ export default function UserMenu() {
                 fetchOptions: {
                   onSuccess: () => {
                     navigate({
-                      to: "/",
+                      to: "/sign-in",
                     });
                   },
                 },

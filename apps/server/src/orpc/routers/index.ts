@@ -3,6 +3,7 @@ import type { RouterClient } from "@orpc/server";
 import { publicProcedure } from "../index";
 import { addressesRouter } from "./addresses";
 import { categoriesRouter } from "./categories";
+import { dashboardRouter } from "./dashboard";
 import { foodsRouter } from "./foods";
 import { ordersRouter } from "./orders";
 
@@ -12,6 +13,7 @@ export const appRouter = {
   }),
 
   // Domain routers
+  dashboard: dashboardRouter,
   categories: categoriesRouter,
   foods: foodsRouter,
   addresses: addressesRouter,

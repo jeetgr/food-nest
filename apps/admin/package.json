@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "@base-ui/react": "^1.0.0",
-    "server": "workspace:*",
     "@foodnest/auth": "workspace:*",
     "@foodnest/env": "workspace:*",
     "@hookform/resolvers": "^5.1.1",
@@ -23,6 +22,7 @@
     "@tanstack/react-form": "^1.12.3",
     "@tanstack/react-query": "^5.90.12",
     "@tanstack/react-router": "^1.141.1",
+    "@tanstack/router-core": "^1.150.0",
     "better-auth": "catalog:",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -31,11 +31,14 @@
     "next-themes": "^0.4.6",
     "react": "19.2.3",
     "react-dom": "19.2.3",
+    "react-dropzone": "^14.3.8",
+    "server": "workspace:*",
     "shadcn": "^3.6.2",
     "sonner": "^2.0.5",
     "tailwind-merge": "^3.3.1",
     "tw-animate-css": "^1.2.5",
-    "zod": "catalog:"
+    "zod": "catalog:",
+    "zustand": "^5.0.10"
   },
   "devDependencies": {
     "@foodnest/config": "workspace:*",

@@ -25,7 +25,7 @@
     "dev": "turbo dev",
     "build": "turbo build",
     "check-types": "turbo check-types",
-    "dev:native": "turbo -F native dev",
+    "dev:customer": "turbo -F customer dev",
     "dev:admin": "turbo -F admin dev",
     "dev:server": "turbo -F server dev",
     "db:push": "turbo -F @foodnest/db db:push",

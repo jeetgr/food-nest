@@ -9,7 +9,7 @@ export const category = pgTable(
     id: primaryId(),
     name: text("name").notNull(),
     slug: text("slug").notNull().unique(),
-    image: text("image"),
+    image: text("image").notNull(),
     isActive: boolean("is_active").default(true).notNull(),
     sortOrder: integer("sort_order").default(0).notNull(),
     ...timestamps,
@@ -17,7 +17,7 @@ export const category = pgTable(
   (table) => [
     index("category_slug_idx").on(table.slug),
     index("category_is_active_idx").on(table.isActive),
-  ]
+  ],
 );
 
 export const categoryRelations = relations(category, ({ many }) => ({

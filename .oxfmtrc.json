@@ -1,3 +1,4 @@
 {
-  "ignorePatterns": []
+  "ignorePatterns": [],
+  "printWidth": 80
 }

@@ -22,5 +22,13 @@ export const auth = betterAuth({
       httpOnly: true,
     },
   },
+  user: {
+    additionalFields: {
+      role: {
+        type: "string",
+        default: "user",
+      },
+    },
+  },
   plugins: [expo()],
 });

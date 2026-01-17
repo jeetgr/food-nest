@@ -13,7 +13,7 @@
   "dependencies": {
     "@better-auth/expo": "catalog:",
     "@expo/vector-icons": "^15.0.2",
-    "@foodnest/api": "workspace:*",
+    "server": "workspace:*",
     "@foodnest/env": "workspace:*",
     "@orpc/client": "catalog:",
     "@orpc/tanstack-query": "catalog:",

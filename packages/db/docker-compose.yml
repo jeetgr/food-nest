@@ -2,7 +2,7 @@ name: foodnest
 
 services:
   postgres:
-    image: postgres
+    image: postgres:18.1-alpine3.23
     container_name: foodnest-postgres
     environment:
       POSTGRES_DB: foodnest

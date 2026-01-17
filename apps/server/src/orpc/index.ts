@@ -18,3 +18,15 @@ const requireAuth = o.middleware(async ({ context, next }) => {
 });
 
 export const protectedProcedure = publicProcedure.use(requireAuth);
+
+export const adminProcedure = protectedProcedure.use(
+  async ({ context, next }) => {
+    const user = context.session.user;
+
+    if (user.role !== "admin") {
+      throw new ORPCError("FORBIDDEN", { message: "Admin access required" });
+    }
+
+    return next({ context });
+  },
+);

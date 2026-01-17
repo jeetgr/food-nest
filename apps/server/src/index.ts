@@ -1,36 +1,45 @@
 import { cors } from "@elysiajs/cors";
-import { createContext } from "@foodnest/api/context";
-import { appRouter } from "@foodnest/api/routers/index";
 import { auth } from "@foodnest/auth";
 import { env } from "@foodnest/env/server";
-import { OpenAPIHandler } from "@orpc/openapi/fetch";
-import { OpenAPIReferencePlugin } from "@orpc/openapi/plugins";
-import { onError } from "@orpc/server";
+import { onError, ORPCError, ValidationError } from "@orpc/server";
 import { RPCHandler } from "@orpc/server/fetch";
-import { ZodToJsonSchemaConverter } from "@orpc/zod/zod4";
+import { StrictGetMethodPlugin } from "@orpc/server/plugins";
 import { Elysia } from "elysia";
+import z from "zod";
+import { appRouter } from "./orpc/routers";
+import { createContext } from "./orpc/context";
 
 const rpcHandler = new RPCHandler(appRouter, {
+  clientInterceptors: [
+    onError((error) => {
+      if (
+        error instanceof ORPCError &&
+        error.code === "BAD_REQUEST" &&
+        error.cause instanceof ValidationError
+      ) {
+        // If you only use Zod you can safely cast to ZodIssue[]
+        const zodError = new z.ZodError(
+          error.cause.issues as z.core.$ZodIssue[],
+        );
+
+        throw new ORPCError("INPUT_VALIDATION_FAILED", {
+          status: 422,
+          message: z.prettifyError(zodError),
+          data: z.flattenError(zodError),
+          cause: error.cause,
+        });
+      }
+    }),
+  ],
   interceptors: [
     onError((error) => {
       console.error(error);
     }),
   ],
-});
-const apiHandler = new OpenAPIHandler(appRouter, {
-  plugins: [
-    new OpenAPIReferencePlugin({
-      schemaConverters: [new ZodToJsonSchemaConverter()],
-    }),
-  ],
-  interceptors: [
-    onError((error) => {
-      console.error(error);
-    }),
-  ],
+  plugins: [new StrictGetMethodPlugin()],
 });
 
-const app = new Elysia()
+new Elysia()
   .use(
     cors({
       origin: env.CORS_ORIGIN,
@@ -49,13 +58,6 @@ const app = new Elysia()
   .all("/rpc*", async (context) => {
     const { response } = await rpcHandler.handle(context.request, {
       prefix: "/rpc",
-      context: await createContext({ context }),
-    });
-    return response ?? new Response("Not Found", { status: 404 });
-  })
-  .all("/api*", async (context) => {
-    const { response } = await apiHandler.handle(context.request, {
-      prefix: "/api-reference",
       context: await createContext({ context }),
     });
     return response ?? new Response("Not Found", { status: 404 });

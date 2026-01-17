@@ -1,4 +1,5 @@
 import { cors } from "@elysiajs/cors";
+import { staticPlugin } from "@elysiajs/static";
 import { auth } from "@foodnest/auth";
 import { env } from "@foodnest/env/server";
 import { onError, ORPCError, ValidationError } from "@orpc/server";
@@ -46,6 +47,12 @@ new Elysia()
       methods: ["GET", "POST", "OPTIONS"],
       allowedHeaders: ["Content-Type", "Authorization"],
       credentials: true,
+    }),
+  )
+  .use(
+    staticPlugin({
+      assets: "./uploads",
+      prefix: "/uploads",
     }),
   )
   .all("/api/auth/*", async (context) => {

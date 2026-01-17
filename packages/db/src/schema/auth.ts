@@ -1,5 +1,16 @@
-import { relations } from "drizzle-orm";
-import { pgTable, text, timestamp, boolean, index } from "drizzle-orm/pg-core";
+import { relations } from "drizzle-orm/relations";
+import {
+  pgTable,
+  text,
+  timestamp,
+  boolean,
+  index,
+  pgEnum,
+} from "drizzle-orm/pg-core";
+import { address } from "./addresses";
+import { order } from "./orders";
+
+export const userRoleEnum = pgEnum("user_role", ["customer", "admin"]);
 
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
@@ -7,6 +18,7 @@ export const user = pgTable("user", {
   email: text("email").notNull().unique(),
   emailVerified: boolean("email_verified").default(false).notNull(),
   image: text("image"),
+  role: userRoleEnum("role").default("customer").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at")
     .defaultNow()
@@ -76,6 +88,8 @@ export const verification = pgTable(
 export const userRelations = relations(user, ({ many }) => ({
   sessions: many(session),
   accounts: many(account),
+  addresses: many(address),
+  orders: many(order),
 }));
 
 export const sessionRelations = relations(session, ({ one }) => ({
@@ -91,3 +105,6 @@ export const accountRelations = relations(account, ({ one }) => ({
     references: [user.id],
   }),
 }));
+
+export type User = typeof user.$inferSelect;
+export type UserRole = (typeof userRoleEnum.enumValues)[number];

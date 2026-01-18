@@ -8,10 +8,41 @@
     "**/routeTree.gen.ts": true
   },
   "files.associations": {
-    "*.css": "tailwindcss",
+    "*.css": "tailwindcss"
   },
   "oxc.typeAware": true,
   "oxc.configPath": ".oxlintrc.json",
   "oxc.fmt.configPath": ".oxfmtrc.json",
-  "oxc.enable": false,
+  "oxc.enable": true,
+  "tailwindCSS.classAttributes": [
+    "class",
+    "className",
+    "headerClassName",
+    "contentContainerClassName",
+    "columnWrapperClassName",
+    "endFillColorClassName",
+    "imageClassName",
+    "tintColorClassName",
+    "ios_backgroundColorClassName",
+    "thumbColorClassName",
+    "trackColorOnClassName",
+    "trackColorOffClassName",
+    "selectionColorClassName",
+    "cursorColorClassName",
+    "underlineColorAndroidClassName",
+    "placeholderTextColorClassName",
+    "selectionHandleColorClassName",
+    "colorsClassName",
+    "progressBackgroundColorClassName",
+    "titleColorClassName",
+    "underlayColorClassName",
+    "colorClassName",
+    "drawerBackgroundColorClassName",
+    "statusBarBackgroundColorClassName",
+    "backdropColorClassName",
+    "backgroundColorClassName",
+    "ListFooterComponentClassName",
+    "ListHeaderComponentClassName"
+  ],
+  "tailwindCSS.classFunctions": ["useResolveClassNames"]
 }

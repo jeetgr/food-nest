@@ -1,8 +1,5 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   Package,
   ShoppingCart,
@@ -12,8 +9,12 @@ import {
   ArrowRight,
   Clock,
 } from "lucide-react";
-import { orpc } from "@/utils/orpc";
+
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
+import { orpc } from "@/utils/orpc";
 
 export const Route = createFileRoute("/(protected)/dashboard")({
   component: DashboardPage,
@@ -92,10 +93,10 @@ function DashboardPage() {
           return (
             <Card key={stat.title} className="relative overflow-hidden">
               <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium text-muted-foreground">
+                <CardTitle className="text-muted-foreground text-sm font-medium">
                   {stat.title}
                 </CardTitle>
-                <Icon className="w-4 h-4 text-muted-foreground" />
+                <Icon className="text-muted-foreground h-4 w-4" />
               </CardHeader>
               <CardContent>
                 {stats.isLoading ? (
@@ -106,11 +107,11 @@ function DashboardPage() {
                     {stat.change !== null && (
                       <p
                         className={cn(
-                          "text-xs flex items-center gap-1 mt-1",
+                          "mt-1 flex items-center gap-1 text-xs",
                           isPositive ? "text-green-600" : "text-red-600",
                         )}
                       >
-                        <TrendIcon className="w-3 h-3" />
+                        <TrendIcon className="h-3 w-3" />
                         {isPositive ? "+" : ""}
                         {stat.change}% from last month
                       </p>
@@ -155,7 +156,7 @@ function DashboardPage() {
                         <span className="flex items-center gap-2">
                           <span
                             className={cn(
-                              "w-2 h-2 rounded-full",
+                              "h-2 w-2 rounded-full",
                               statusColors[item.status],
                             )}
                           />
@@ -163,7 +164,7 @@ function DashboardPage() {
                         </span>
                         <span className="font-medium">{item.count}</span>
                       </div>
-                      <div className="h-2 bg-muted rounded-full overflow-hidden">
+                      <div className="bg-muted h-2 overflow-hidden rounded-full">
                         <div
                           className={cn(
                             "h-full transition-all",
@@ -177,7 +178,7 @@ function DashboardPage() {
                 })}
               </div>
             ) : (
-              <p className="text-sm text-muted-foreground text-center py-4">
+              <p className="text-muted-foreground py-4 text-center text-sm">
                 No orders yet
               </p>
             )}
@@ -189,7 +190,7 @@ function DashboardPage() {
           <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle>Recent Orders</CardTitle>
             <Button variant="ghost" size="sm" render={<Link to="/orders" />}>
-              View all <ArrowRight className="w-4 h-4 ml-1" />
+              View all <ArrowRight className="ml-1 h-4 w-4" />
             </Button>
           </CardHeader>
           <CardContent>
@@ -204,14 +205,14 @@ function DashboardPage() {
                 {recentOrders.data.map((order) => (
                   <div
                     key={order.id}
-                    className="flex items-center justify-between p-3 bg-muted/50 rounded-lg"
+                    className="bg-muted/50 flex items-center justify-between rounded-lg p-3"
                   >
                     <div className="space-y-1">
                       <p className="text-sm font-medium">
                         {order.user?.name || "Guest"}
                       </p>
-                      <p className="text-xs text-muted-foreground flex items-center gap-1">
-                        <Clock className="w-3 h-3" />
+                      <p className="text-muted-foreground flex items-center gap-1 text-xs">
+                        <Clock className="h-3 w-3" />
                         {new Date(order.createdAt).toLocaleDateString()}
                       </p>
                     </div>
@@ -221,7 +222,7 @@ function DashboardPage() {
                       </p>
                       <span
                         className={cn(
-                          "text-xs px-2 py-0.5 rounded-full",
+                          "rounded-full px-2 py-0.5 text-xs",
                           statusColors[order.status],
                           "text-white",
                         )}
@@ -233,7 +234,7 @@ function DashboardPage() {
                 ))}
               </div>
             ) : (
-              <p className="text-sm text-muted-foreground text-center py-4">
+              <p className="text-muted-foreground py-4 text-center text-sm">
                 No orders yet
               </p>
             )}
@@ -251,15 +252,15 @@ function DashboardPage() {
         </CardHeader>
         <CardContent className="flex flex-wrap gap-3">
           <Button variant="outline" render={<Link to="/categories" />}>
-            <UtensilsCrossed className="w-4 h-4 mr-2" />
+            <UtensilsCrossed className="mr-2 h-4 w-4" />
             Manage Categories
           </Button>
           <Button variant="outline" render={<Link to="/foods" />}>
-            <Package className="w-4 h-4 mr-2" />
+            <Package className="mr-2 h-4 w-4" />
             Manage Foods
           </Button>
           <Button variant="outline" render={<Link to="/orders" />}>
-            <ShoppingCart className="w-4 h-4 mr-2" />
+            <ShoppingCart className="mr-2 h-4 w-4" />
             View Orders
           </Button>
         </CardContent>
@@ -276,7 +277,7 @@ function TopSellingFoods() {
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle>Top Selling Foods</CardTitle>
         <Button variant="ghost" size="sm" render={<Link to="/foods" />}>
-          View all <ArrowRight className="w-4 h-4 ml-1" />
+          View all <ArrowRight className="ml-1 h-4 w-4" />
         </Button>
       </CardHeader>
       <CardContent>
@@ -291,21 +292,21 @@ function TopSellingFoods() {
             {topFoods.data.map((food) => (
               <div
                 key={food?.id}
-                className="flex flex-col p-3 bg-muted/50 rounded-lg"
+                className="bg-muted/50 flex flex-col rounded-lg p-3"
               >
                 {food?.image && (
                   <img
                     src={food.image}
                     alt={food.name}
-                    className="w-full h-16 object-cover rounded mb-2"
+                    className="mb-2 h-16 w-full rounded object-cover"
                   />
                 )}
-                <p className="text-sm font-medium truncate">{food?.name}</p>
-                <p className="text-xs text-muted-foreground">
+                <p className="truncate text-sm font-medium">{food?.name}</p>
+                <p className="text-muted-foreground text-xs">
                   {food?.category?.name}
                 </p>
-                <div className="mt-auto pt-2 flex justify-between text-xs">
-                  <span className="text-green-600 font-medium">
+                <div className="mt-auto flex justify-between pt-2 text-xs">
+                  <span className="font-medium text-green-600">
                     {food.totalSold} sold
                   </span>
                   <span className="font-medium">
@@ -316,7 +317,7 @@ function TopSellingFoods() {
             ))}
           </div>
         ) : (
-          <p className="text-sm text-muted-foreground text-center py-4">
+          <p className="text-muted-foreground py-4 text-center text-sm">
             No sales data yet
           </p>
         )}

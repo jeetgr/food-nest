@@ -1,5 +1,6 @@
-import { useState, type ImgHTMLAttributes } from "react";
 import { ImageOff } from "lucide-react";
+import { useState, type ImgHTMLAttributes } from "react";
+
 import { cn } from "@/lib/utils";
 
 interface ImageWithFallbackProps extends Omit<
@@ -41,20 +42,20 @@ export function ImageWithFallback({
     return (
       <div
         className={cn(
-          "flex items-center justify-center bg-muted text-muted-foreground",
+          "bg-muted text-muted-foreground flex items-center justify-center",
           fallbackClassName || className,
         )}
         role="img"
         aria-label={alt || "Image placeholder"}
       >
-        <ImageOff className="w-8 h-8" />
+        <ImageOff className="h-8 w-8" />
       </div>
     );
   }
 
   return (
     <>
-      {isLoading && <div className={cn("animate-pulse bg-muted", className)} />}
+      {isLoading && <div className={cn("bg-muted animate-pulse", className)} />}
       <img
         src={src}
         alt={alt}

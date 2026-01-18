@@ -9,11 +9,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { FieldError } from "@/components/ui/field-error";
+import { ImageUpload } from "@/components/ui/image-upload";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { ImageUpload } from "@/components/ui/image-upload";
-import { FieldError } from "@/components/ui/field-error";
 
 // Validation schema
 const categorySchema = z.object({
@@ -138,7 +138,7 @@ export function CategoryDialog({
                   onBlur={field.handleBlur}
                   placeholder="Auto-generated from name"
                 />
-                <p className="text-xs text-muted-foreground">
+                <p className="text-muted-foreground text-xs">
                   Leave empty to auto-generate from name
                 </p>
                 <FieldError field={field} />
@@ -160,7 +160,7 @@ export function CategoryDialog({
                   }
                   onBlur={field.handleBlur}
                 />
-                <p className="text-xs text-muted-foreground">
+                <p className="text-muted-foreground text-xs">
                   Lower numbers appear first
                 </p>
               </div>
@@ -190,7 +190,7 @@ export function CategoryDialog({
                 disabled={formIsSubmitting || isSubmitting}
               >
                 {(formIsSubmitting || isSubmitting) && (
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 )}
                 {isEditing ? "Update Category" : "Create Category"}
               </Button>

@@ -14,7 +14,11 @@ export interface StorageProvider {
    * @param filename - Original filename (used for extension detection)
    * @param folder - Optional subfolder (e.g., "foods", "categories")
    */
-  upload(file: Buffer, filename: string, folder?: string): Promise<UploadResult>;
+  upload(
+    file: Buffer,
+    filename: string,
+    folder?: string,
+  ): Promise<UploadResult>;
 
   /**
    * Delete a file by URL or key

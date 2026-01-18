@@ -14,7 +14,4 @@
   "oxc.configPath": ".oxlintrc.json",
   "oxc.fmt.configPath": ".oxfmtrc.json",
   "oxc.enable": false,
-  "[json]": {
-    "editor.defaultFormatter": "oxc.oxc-vscode"
-  }
 }

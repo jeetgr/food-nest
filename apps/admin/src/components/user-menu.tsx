@@ -9,10 +9,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useSession } from "@/hooks/use-session";
 import { authClient } from "@/lib/auth-client";
 
 import { Button } from "./ui/button";
-import { useSession } from "@/hooks/use-session";
 
 export default function UserMenu() {
   const navigate = useNavigate();
@@ -36,10 +36,10 @@ export default function UserMenu() {
           <DropdownMenuItem
             variant="destructive"
             onClick={() => {
-              authClient.signOut({
+              void authClient.signOut({
                 fetchOptions: {
                   onSuccess: () => {
-                    navigate({
+                    void navigate({
                       to: "/sign-in",
                     });
                   },

@@ -1,4 +1,9 @@
-import type { CreatePaymentInput, PaymentProvider, PaymentResult, RefundResult } from "./index";
+import type {
+  CreatePaymentInput,
+  PaymentProvider,
+  PaymentResult,
+  RefundResult,
+} from "./index";
 
 /**
  * Cash on Delivery payment provider

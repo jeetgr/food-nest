@@ -1,4 +1,7 @@
-import type { PaymentMethod, PaymentStatus } from "@foodnest/db/schema/payments";
+import type {
+  PaymentMethod,
+  PaymentStatus,
+} from "@foodnest/db/schema/payments";
 
 export interface PaymentResult {
   success: boolean;

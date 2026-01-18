@@ -147,7 +147,7 @@ function FoodsPage() {
           </p>
         </div>
         <Button onClick={handleAddNew}>
-          <Plus className="w-4 h-4 mr-2" />
+          <Plus className="mr-2 h-4 w-4" />
           Add Food
         </Button>
       </div>

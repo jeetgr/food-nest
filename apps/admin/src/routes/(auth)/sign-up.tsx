@@ -1,16 +1,16 @@
-import { createFileRoute } from "@tanstack/react-router";
 import { useForm } from "@tanstack/react-form";
+import { createFileRoute } from "@tanstack/react-router";
 import { useNavigate } from "@tanstack/react-router";
+import { Loader2, Eye, EyeOff } from "lucide-react";
+import { useState } from "react";
 import { toast } from "sonner";
 import z from "zod";
-import { useState } from "react";
-import { Loader2, Eye, EyeOff } from "lucide-react";
 
-import { authClient } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Logo } from "@/components/ui/logo";
+import { authClient } from "@/lib/auth-client";
 
 export const Route = createFileRoute("/(auth)/sign-up")({
   component: SignUpPage,
@@ -37,7 +37,7 @@ function SignUpPage() {
           {
             onSuccess: () => {
               toast.success("Account created! You can now sign in.");
-              navigate({ to: "/sign-in" });
+              void navigate({ to: "/sign-in" });
             },
             onError: (error) => {
               toast.error(error.error.message || "Registration failed");
@@ -59,45 +59,45 @@ function SignUpPage() {
   });
 
   return (
-    <div className="min-h-screen grid lg:grid-cols-2">
+    <div className="grid min-h-screen lg:grid-cols-2">
       {/* Left panel - Branding */}
-      <div className="hidden lg:flex flex-col justify-between bg-linear-to-br from-slate-900 via-slate-800 to-slate-900 p-12 text-white">
+      <div className="hidden flex-col justify-between bg-linear-to-br from-slate-900 via-slate-800 to-slate-900 p-12 text-white lg:flex">
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-orange-500 rounded-xl">
+          <div className="rounded-xl bg-orange-500 p-2">
             <Logo className="size-8" />
           </div>
           <span className="text-2xl font-bold">FoodNest Admin</span>
         </div>
 
         <div className="space-y-6">
-          <h1 className="text-5xl font-bold leading-tight">
+          <h1 className="text-5xl leading-tight font-bold">
             Create Admin
             <br />
             Account
           </h1>
-          <p className="text-white/70 text-lg max-w-md">
+          <p className="max-w-md text-lg text-white/70">
             Register a new admin account to manage the FoodNest platform.
           </p>
         </div>
 
-        <div className="space-y-4 text-white/60 text-sm">
+        <div className="space-y-4 text-sm text-white/60">
           <div className="flex items-center gap-3">
-            <div className="w-2 h-2 rounded-full bg-yellow-400" />
+            <div className="h-2 w-2 rounded-full bg-yellow-400" />
             <span>This page is for initial setup only</span>
           </div>
           <div className="flex items-center gap-3">
-            <div className="w-2 h-2 rounded-full bg-yellow-400" />
+            <div className="h-2 w-2 rounded-full bg-yellow-400" />
             <span>Set role to 'admin' in database after registration</span>
           </div>
         </div>
       </div>
 
       {/* Right panel - Sign up form */}
-      <div className="flex items-center justify-center p-8 bg-background">
+      <div className="bg-background flex items-center justify-center p-8">
         <div className="w-full max-w-md space-y-8">
           {/* Mobile logo */}
-          <div className="lg:hidden flex items-center justify-center gap-3 mb-8">
-            <div className="p-2 bg-linear-to-br from-orange-500 to-red-500 rounded-xl">
+          <div className="mb-8 flex items-center justify-center gap-3 lg:hidden">
+            <div className="rounded-xl bg-linear-to-br from-orange-500 to-red-500 p-2">
               <Logo className="size-8" />
             </div>
             <span className="text-xl font-bold">FoodNest Admin</span>
@@ -116,7 +116,7 @@ function SignUpPage() {
             onSubmit={(e) => {
               e.preventDefault();
               e.stopPropagation();
-              form.handleSubmit();
+              void form.handleSubmit();
             }}
             className="space-y-5"
           >
@@ -137,7 +137,7 @@ function SignUpPage() {
                   {field.state.meta.errors.map((error) => (
                     <p
                       key={error?.message}
-                      className="text-sm text-destructive"
+                      className="text-destructive text-sm"
                     >
                       {error?.message}
                     </p>
@@ -163,7 +163,7 @@ function SignUpPage() {
                   {field.state.meta.errors.map((error) => (
                     <p
                       key={error?.message}
-                      className="text-sm text-destructive"
+                      className="text-destructive text-sm"
                     >
                       {error?.message}
                     </p>
@@ -190,19 +190,19 @@ function SignUpPage() {
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                      className="text-muted-foreground hover:text-foreground absolute top-1/2 right-3 -translate-y-1/2 transition-colors"
                     >
                       {showPassword ? (
-                        <EyeOff className="w-5 h-5" />
+                        <EyeOff className="h-5 w-5" />
                       ) : (
-                        <Eye className="w-5 h-5" />
+                        <Eye className="h-5 w-5" />
                       )}
                     </button>
                   </div>
                   {field.state.meta.errors.map((error) => (
                     <p
                       key={error?.message}
-                      className="text-sm text-destructive"
+                      className="text-destructive text-sm"
                     >
                       {error?.message}
                     </p>
@@ -215,12 +215,12 @@ function SignUpPage() {
               {(state) => (
                 <Button
                   type="submit"
-                  className="w-full h-12 text-base bg-linear-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600"
+                  className="h-12 w-full bg-linear-to-r from-orange-500 to-red-500 text-base hover:from-orange-600 hover:to-red-600"
                   disabled={!state.canSubmit || state.isSubmitting}
                 >
                   {state.isSubmitting ? (
                     <>
-                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                       Creating account...
                     </>
                   ) : (

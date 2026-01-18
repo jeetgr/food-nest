@@ -1,14 +1,14 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft, Edit2, Package } from "lucide-react";
 import { useState } from "react";
 import z from "zod";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ImageWithFallback } from "@/components/ui/image-with-fallback";
+import { Skeleton } from "@/components/ui/skeleton";
 import { orpc } from "@/utils/orpc";
 
 import { FoodDialog } from "./-components/food-dialog";
@@ -47,7 +47,7 @@ function FoodDetailPage() {
     orpc.foods.update.mutationOptions({
       onSuccess: () => {
         setIsEditing(false);
-        queryClient.invalidateQueries({
+        void queryClient.invalidateQueries({
           queryKey: orpc.foods.getById.key({ input: { id: foodId } }),
         });
       },
@@ -61,7 +61,7 @@ function FoodDetailPage() {
   const toggleMutation = useMutation(
     orpc.foods.toggleAvailability.mutationOptions({
       onSuccess: () => {
-        queryClient.invalidateQueries({
+        void queryClient.invalidateQueries({
           queryKey: orpc.foods.getById.key({ input: { id: foodId } }),
         });
       },
@@ -72,7 +72,7 @@ function FoodDetailPage() {
   );
 
   const goBack = () => {
-    navigate({
+    void navigate({
       to: "/foods",
       search: { page: from || 1, categoryId },
     });
@@ -99,11 +99,11 @@ function FoodDetailPage() {
     return (
       <div className="space-y-6">
         <Button variant="ghost" onClick={goBack}>
-          <ArrowLeft className="w-4 h-4 mr-2" />
+          <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Foods
         </Button>
         <Card>
-          <CardContent className="py-12 text-center text-muted-foreground">
+          <CardContent className="text-muted-foreground py-12 text-center">
             Food not found
           </CardContent>
         </Card>
@@ -119,7 +119,7 @@ function FoodDetailPage() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Button variant="ghost" size="icon" onClick={goBack}>
-            <ArrowLeft className="w-5 h-5" />
+            <ArrowLeft className="h-5 w-5" />
           </Button>
           <div>
             <h1 className="text-3xl font-bold">{item.name}</h1>
@@ -128,7 +128,7 @@ function FoodDetailPage() {
         </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" onClick={() => setIsEditing(true)}>
-            <Edit2 className="w-4 h-4 mr-2" />
+            <Edit2 className="mr-2 h-4 w-4" />
             Edit
           </Button>
           <Button
@@ -169,10 +169,10 @@ function FoodDetailPage() {
             <ImageWithFallback
               src={item.image}
               alt={item.name}
-              className="w-full aspect-square object-cover"
+              className="aspect-square w-full object-cover"
               fallback={
-                <div className="w-full aspect-square bg-gradient-to-br from-muted to-muted/50 flex items-center justify-center">
-                  <Package className="w-16 h-16 text-muted-foreground/50" />
+                <div className="from-muted to-muted/50 flex aspect-square w-full items-center justify-center bg-gradient-to-br">
+                  <Package className="text-muted-foreground/50 h-16 w-16" />
                 </div>
               }
             />
@@ -185,25 +185,25 @@ function FoodDetailPage() {
             <CardTitle>Details</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="flex items-center justify-between py-2 border-b">
+            <div className="flex items-center justify-between border-b py-2">
               <span className="text-muted-foreground">Price</span>
               <span className="text-2xl font-bold">₹{item.price}</span>
             </div>
-            <div className="flex items-center justify-between py-2 border-b">
+            <div className="flex items-center justify-between border-b py-2">
               <span className="text-muted-foreground">Category</span>
               <Badge variant="secondary">{item.category?.name}</Badge>
             </div>
-            <div className="flex items-center justify-between py-2 border-b">
+            <div className="flex items-center justify-between border-b py-2">
               <span className="text-muted-foreground">Stock</span>
               <span className="font-medium">{item.stock} units</span>
             </div>
-            <div className="flex items-center justify-between py-2 border-b">
+            <div className="flex items-center justify-between border-b py-2">
               <span className="text-muted-foreground">Availability</span>
               <Badge variant={item.isAvailable ? "default" : "destructive"}>
                 {item.isAvailable ? "Available" : "Unavailable"}
               </Badge>
             </div>
-            <div className="flex items-center justify-between py-2 border-b">
+            <div className="flex items-center justify-between border-b py-2">
               <span className="text-muted-foreground">Created</span>
               <span className="font-medium">
                 {new Date(item.createdAt).toLocaleDateString("en-IN", {
@@ -220,8 +220,8 @@ function FoodDetailPage() {
               </span>
             </div>
             {item.description && (
-              <div className="pt-4 border-t">
-                <p className="text-sm text-muted-foreground mb-2">
+              <div className="border-t pt-4">
+                <p className="text-muted-foreground mb-2 text-sm">
                   Description
                 </p>
                 <p>{item.description}</p>
@@ -237,7 +237,7 @@ function FoodDetailPage() {
           <div className="flex items-center justify-between">
             <div>
               <p className="font-medium">View Category</p>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-muted-foreground text-sm">
                 Manage {item.category?.name} category
               </p>
             </div>

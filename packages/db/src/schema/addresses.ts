@@ -1,7 +1,8 @@
 import { pgTable, text, boolean, index } from "drizzle-orm/pg-core";
-import { primaryId, timestamps } from "./common";
-import { user } from "./auth";
 import { relations } from "drizzle-orm/relations";
+
+import { user } from "./auth";
+import { primaryId, timestamps } from "./common";
 import { order } from "./orders";
 
 export const address = pgTable(

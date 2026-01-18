@@ -1,14 +1,16 @@
 import { Outlet } from "@tanstack/react-router";
-import { Sidebar } from "./sidebar";
-import { TopNav } from "./top-nav";
+
 import { cn } from "@/lib/utils";
 import { useSidebarStore } from "@/stores/sidebar";
+
+import { Sidebar } from "./sidebar";
+import { TopNav } from "./top-nav";
 
 export function AdminLayout() {
   const collapsed = useSidebarStore((s) => s.collapsed);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="bg-background min-h-screen">
       {/* Sidebar */}
       <Sidebar />
 

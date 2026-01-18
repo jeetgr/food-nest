@@ -3,7 +3,7 @@ import { Link, type LinkProps } from "@tanstack/react-router";
 import { ModeToggle } from "./mode-toggle";
 import UserMenu from "./user-menu";
 
-const links: { label: string; linkProps: LinkProps}[] = [
+const links: { label: string; linkProps: LinkProps }[] = [
   {
     label: "Dashboard",
     linkProps: {

@@ -1,9 +1,10 @@
-import { type RegisteredRouter, useRouteContext } from "@tanstack/react-router";
+import type {} from "@tanstack/react-router";
 import type {
   UseRouteContextOptions,
   UseRouteContextResult,
 } from "@tanstack/router-core";
-import type {} from "@tanstack/react-router";
+
+import { type RegisteredRouter, useRouteContext } from "@tanstack/react-router";
 
 export function useSession<TSelected>(
   opts: Omit<

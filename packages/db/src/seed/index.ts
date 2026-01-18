@@ -1,11 +1,12 @@
+import { v4 as uuid } from "uuid";
+
 import { db } from "../index";
+import { address } from "../schema/addresses";
+import { user } from "../schema/auth";
 import { category } from "../schema/categories";
 import { food } from "../schema/foods";
-import { user } from "../schema/auth";
-import { address } from "../schema/addresses";
 import { order, orderItem } from "../schema/orders";
 import { payment } from "../schema/payments";
-import { v4 as uuid } from "uuid";
 
 // Sample images (placeholder URLs - you can replace with real images)
 const CATEGORY_IMAGES = [

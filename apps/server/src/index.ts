@@ -7,8 +7,9 @@ import { RPCHandler } from "@orpc/server/fetch";
 import { StrictGetMethodPlugin } from "@orpc/server/plugins";
 import { Elysia } from "elysia";
 import z from "zod";
-import { appRouter } from "./orpc/routers";
+
 import { createContext } from "./orpc/context";
+import { appRouter } from "./orpc/routers";
 
 const rpcHandler = new RPCHandler(appRouter, {
   clientInterceptors: [

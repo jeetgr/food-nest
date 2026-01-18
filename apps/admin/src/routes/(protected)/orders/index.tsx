@@ -24,6 +24,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Pagination } from "@/components/ui/pagination";
 import {
   Select,
   SelectContent,
@@ -32,7 +33,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Pagination } from "@/components/ui/pagination";
 import { Skeleton } from "@/components/ui/skeleton";
 import { authClient } from "@/lib/auth-client";
 import { client, orpc } from "@/utils/orpc";
@@ -121,7 +121,9 @@ function OrdersPage() {
     mutationFn: ({ id, status }: { id: string; status: string }) =>
       client.orders.updateStatus({ id, status: status as any }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: orpc.orders.listAll.key() });
+      void queryClient.invalidateQueries({
+        queryKey: orpc.orders.listAll.key(),
+      });
     },
   });
 
@@ -165,14 +167,14 @@ function OrdersPage() {
           size="sm"
           className="gap-2"
           onClick={() => {
-            queryClient.invalidateQueries({
+            void queryClient.invalidateQueries({
               queryKey: orpc.orders.listAll.key(),
             });
           }}
           disabled={orders.isRefetching}
         >
           <RefreshCcw
-            className={`w-4 h-4 ${orders.isRefetching ? "animate-spin" : ""}`}
+            className={`h-4 w-4 ${orders.isRefetching ? "animate-spin" : ""}`}
           />
           Refresh
         </Button>
@@ -217,14 +219,14 @@ function OrdersPage() {
                     <CardTitle className="text-lg">
                       Order #{order.id.slice(-8).toUpperCase()}
                     </CardTitle>
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
-                      <Clock className="w-4 h-4" />
+                    <div className="text-muted-foreground mt-1 flex items-center gap-2 text-sm">
+                      <Clock className="h-4 w-4" />
                       {formatDate(order.createdAt)}
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
                     <Badge
-                      className={`${statusColors[order.status] || "bg-gray-100"} rounded-full shadow-sm border-none`}
+                      className={`${statusColors[order.status] || "bg-gray-100"} rounded-full border-none shadow-sm`}
                     >
                       {statusLabels[order.status] || order.status}
                     </Badge>
@@ -238,7 +240,7 @@ function OrdersPage() {
                         />
                       }
                     >
-                      <Eye className="w-4 h-4 mr-1" />
+                      <Eye className="mr-1 h-4 w-4" />
                       View
                     </Button>
                     {order.status !== "delivered" &&
@@ -247,7 +249,7 @@ function OrdersPage() {
                           <DropdownMenuTrigger>
                             <Button variant="outline" size="sm">
                               Update Status
-                              <ChevronDown className="w-4 h-4 ml-1" />
+                              <ChevronDown className="ml-1 h-4 w-4" />
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent>
@@ -287,8 +289,8 @@ function OrdersPage() {
                   {/* Customer & Address */}
                   <div className="space-y-2">
                     <p className="font-medium">{order.user?.name}</p>
-                    <div className="flex items-start gap-2 text-sm text-muted-foreground">
-                      <MapPin className="w-4 h-4 mt-0.5" />
+                    <div className="text-muted-foreground flex items-start gap-2 text-sm">
+                      <MapPin className="mt-0.5 h-4 w-4" />
                       <div>
                         <p>{order.address?.street}</p>
                         <p>
@@ -310,7 +312,7 @@ function OrdersPage() {
                           className="flex items-center justify-between text-sm"
                         >
                           <div className="flex items-center gap-2">
-                            <Package className="w-4 h-4 text-muted-foreground" />
+                            <Package className="text-muted-foreground h-4 w-4" />
                             <span>
                               {item.food?.name} × {item.quantity}
                             </span>
@@ -319,7 +321,7 @@ function OrdersPage() {
                         </div>
                       ))}
                     </div>
-                    <div className="pt-2 border-t flex justify-between font-bold">
+                    <div className="flex justify-between border-t pt-2 font-bold">
                       <span>Total</span>
                       <span>₹{order.totalAmount}</span>
                     </div>
@@ -328,7 +330,7 @@ function OrdersPage() {
 
                 {/* Notes */}
                 {order.notes && (
-                  <div className="mt-4 p-3 bg-muted rounded-md text-sm">
+                  <div className="bg-muted mt-4 rounded-md p-3 text-sm">
                     <span className="font-medium">Notes: </span>
                     {order.notes}
                   </div>
@@ -352,7 +354,7 @@ function OrdersPage() {
       ) : (
         <Card>
           <CardContent className="py-8">
-            <p className="text-center text-muted-foreground">
+            <p className="text-muted-foreground text-center">
               No orders found
               {status !== "all" && ` with status "${statusLabels[status]}"`}
             </p>

@@ -1,8 +1,16 @@
 import { relations } from "drizzle-orm";
-import { pgTable, text, integer, numeric, pgEnum, index } from "drizzle-orm/pg-core";
-import { primaryId, timestamps } from "./common";
-import { user } from "./auth";
+import {
+  pgTable,
+  text,
+  integer,
+  numeric,
+  pgEnum,
+  index,
+} from "drizzle-orm/pg-core";
+
 import { address } from "./addresses";
+import { user } from "./auth";
+import { primaryId, timestamps } from "./common";
 import { food } from "./foods";
 import { payment } from "./payments";
 

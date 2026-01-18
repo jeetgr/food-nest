@@ -8,10 +8,12 @@ import {
   ChevronRight,
   X,
 } from "lucide-react";
+
 import { cn } from "@/lib/utils";
-import { Logo } from "./ui/logo";
-import { Button } from "./ui/button";
 import { useSidebarStore } from "@/stores/sidebar";
+
+import { Button } from "./ui/button";
+import { Logo } from "./ui/logo";
 
 const navItems = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -34,18 +36,18 @@ export function Sidebar() {
       {/* Mobile overlay backdrop */}
       <div
         className={cn(
-          "fixed inset-0 z-40 bg-black/50 lg:hidden transition-opacity duration-300",
+          "fixed inset-0 z-40 bg-black/50 transition-opacity duration-300 lg:hidden",
           mobileOpen
-            ? "opacity-100 pointer-events-auto"
-            : "opacity-0 pointer-events-none",
+            ? "pointer-events-auto opacity-100"
+            : "pointer-events-none opacity-0",
         )}
-        onClick={closeMobile}
+        onPointerDown={closeMobile}
       />
 
       {/* Sidebar */}
       <aside
         className={cn(
-          "fixed left-0 top-0 z-50 h-screen bg-sidebar border-r border-sidebar-border",
+          "bg-sidebar border-sidebar-border fixed top-0 left-0 z-50 h-screen border-r",
           // Smooth transition for slide and width changes
           "transition-[width,transform] duration-300 ease-in-out",
           // Desktop: show based on collapsed state
@@ -56,15 +58,15 @@ export function Sidebar() {
         )}
       >
         {/* Logo */}
-        <div className="flex h-16 items-center justify-between px-4 border-b border-sidebar-border">
+        <div className="border-sidebar-border flex h-16 items-center justify-between border-b px-4">
           {(!collapsed || mobileOpen) && (
             <div className="flex items-center gap-2">
               <Logo className="size-8" />
-              <span className="font-bold text-lg">FoodNest</span>
+              <span className="text-lg font-bold">FoodNest</span>
             </div>
           )}
           {collapsed && !mobileOpen && (
-            <div className="p-1.5 bg-orange-500 rounded-lg mx-auto">
+            <div className="mx-auto rounded-lg bg-orange-500 p-1.5">
               <Logo className="size-8" />
             </div>
           )}
@@ -77,13 +79,13 @@ export function Sidebar() {
               onClick={closeMobile}
               className="lg:hidden"
             >
-              <X className="w-5 h-5" />
+              <X className="h-5 w-5" />
             </Button>
           )}
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 px-3 py-4 space-y-1">
+        <nav className="flex-1 space-y-1 px-3 py-4">
           {navItems.map((item) => {
             const isActive =
               currentPath === item.to || currentPath.startsWith(`${item.to}/`);
@@ -101,7 +103,7 @@ export function Sidebar() {
                     : "text-sidebar-foreground hover:bg-sidebar-accent/50",
                 )}
               >
-                <Icon className="w-5 h-5 shrink-0" />
+                <Icon className="h-5 w-5 shrink-0" />
                 {(!collapsed || mobileOpen) && <span>{item.label}</span>}
               </Link>
             );
@@ -109,16 +111,17 @@ export function Sidebar() {
         </nav>
 
         {/* Collapse button - desktop only */}
-        <div className="absolute bottom-4 left-0 right-0 px-3 hidden lg:block">
+        <div className="absolute right-0 bottom-4 left-0 hidden px-3 lg:block">
           <button
+            type="button"
             onClick={toggle}
-            className="flex items-center justify-center w-full py-2 rounded-lg text-sidebar-foreground hover:bg-sidebar-accent/50 transition-colors"
+            className="text-sidebar-foreground hover:bg-sidebar-accent/50 flex w-full items-center justify-center rounded-lg py-2 transition-colors"
           >
             {collapsed ? (
-              <ChevronRight className="w-5 h-5" />
+              <ChevronRight className="h-5 w-5" />
             ) : (
               <>
-                <ChevronLeft className="w-5 h-5 mr-2" />
+                <ChevronLeft className="mr-2 h-5 w-5" />
                 <span className="text-sm">Collapse</span>
               </>
             )}

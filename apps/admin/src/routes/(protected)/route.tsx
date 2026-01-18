@@ -1,6 +1,7 @@
-import { authClient } from "@/lib/auth-client";
-import { AdminLayout } from "@/components/admin-layout";
 import { createFileRoute, redirect } from "@tanstack/react-router";
+
+import { AdminLayout } from "@/components/admin-layout";
+import { authClient } from "@/lib/auth-client";
 
 export const Route = createFileRoute("/(protected)")({
   beforeLoad: async () => {

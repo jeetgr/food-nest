@@ -1,4 +1,5 @@
 import * as React from "react";
+
 import { cn } from "@/lib/utils";
 
 const Textarea = React.forwardRef<
@@ -16,7 +17,7 @@ const Textarea = React.forwardRef<
         // Boxy design with rounded-none
         "min-h-20 w-full rounded-none border bg-transparent px-2.5 py-2 text-xs",
         "transition-colors focus-visible:ring-1 aria-invalid:ring-1",
-        "placeholder:text-muted-foreground outline-none resize-none",
+        "placeholder:text-muted-foreground resize-none outline-none",
         "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
         className,
       )}

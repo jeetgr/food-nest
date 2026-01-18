@@ -23,7 +23,7 @@
   "type": "module",
   "scripts": {
     "lint": "oxlint --type-aware --type-check",
-    "lint:fix": "oxlint --fix --type-aware",
+    "lint:fix": "oxlint --fix --type-aware --type-check",
     "format": "oxfmt",
     "format:check": "oxfmt --check",
     "dev": "turbo dev",

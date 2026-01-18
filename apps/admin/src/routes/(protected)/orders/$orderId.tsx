@@ -1,19 +1,19 @@
-import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { createFileRoute } from "@tanstack/react-router";
 import { ArrowLeft, Package, MapPin, Clock, ChevronDown } from "lucide-react";
+import z from "zod";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Skeleton } from "@/components/ui/skeleton";
 import { orpc, client } from "@/utils/orpc";
-import z from "zod";
 
 export const Route = createFileRoute("/(protected)/orders/$orderId")({
   component: OrderDetailPage,
@@ -65,15 +65,17 @@ function OrderDetailPage() {
     mutationFn: ({ status }: { status: string }) =>
       client.orders.updateStatus({ id: orderId, status: status as any }),
     onSuccess: () => {
-      queryClient.invalidateQueries({
+      void queryClient.invalidateQueries({
         queryKey: orpc.orders.getById.key({ input: { id: orderId } }),
       });
-      queryClient.invalidateQueries({ queryKey: orpc.orders.listAll.key() });
+      void queryClient.invalidateQueries({
+        queryKey: orpc.orders.listAll.key(),
+      });
     },
   });
 
   const goBack = () => {
-    navigate({
+    void navigate({
       to: "/orders",
       search: { page: from || 1 },
     });
@@ -99,11 +101,11 @@ function OrderDetailPage() {
     return (
       <div className="space-y-6">
         <Button variant="ghost" onClick={goBack}>
-          <ArrowLeft className="w-4 h-4 mr-2" />
+          <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Orders
         </Button>
         <Card>
-          <CardContent className="py-12 text-center text-muted-foreground">
+          <CardContent className="text-muted-foreground py-12 text-center">
             Order not found
           </CardContent>
         </Card>
@@ -119,14 +121,14 @@ function OrderDetailPage() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Button variant="ghost" size="icon" onClick={goBack}>
-            <ArrowLeft className="w-5 h-5" />
+            <ArrowLeft className="h-5 w-5" />
           </Button>
           <div>
             <h1 className="text-3xl font-bold">
               Order #{item.id.slice(-8).toUpperCase()}
             </h1>
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <Clock className="w-4 h-4" />
+            <div className="text-muted-foreground flex items-center gap-2">
+              <Clock className="h-4 w-4" />
               {formatDate(item.createdAt)}
             </div>
           </div>
@@ -140,7 +142,7 @@ function OrderDetailPage() {
               <DropdownMenuTrigger>
                 <Button variant="outline">
                   Update Status
-                  <ChevronDown className="w-4 h-4 ml-1" />
+                  <ChevronDown className="ml-1 h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
@@ -176,23 +178,23 @@ function OrderDetailPage() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <p className="font-medium text-lg">{item.user?.name}</p>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-lg font-medium">{item.user?.name}</p>
+              <p className="text-muted-foreground text-sm">
                 {item.user?.email}
               </p>
             </div>
-            <div className="flex items-start gap-2 pt-4 border-t">
-              <MapPin className="w-4 h-4 mt-1 text-muted-foreground" />
+            <div className="flex items-start gap-2 border-t pt-4">
+              <MapPin className="text-muted-foreground mt-1 h-4 w-4" />
               <div>
                 <p className="font-medium">{item.address?.label}</p>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-muted-foreground text-sm">
                   {item.address?.street}
                 </p>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-muted-foreground text-sm">
                   {item.address?.city}, {item.address?.state}{" "}
                   {item.address?.postalCode}
                 </p>
-                <p className="text-sm font-medium mt-1">
+                <p className="mt-1 text-sm font-medium">
                   {item.address?.phone}
                 </p>
               </div>
@@ -222,7 +224,7 @@ function OrderDetailPage() {
                 {item.payment?.status || "N/A"}
               </Badge>
             </div>
-            <div className="flex items-center justify-between pt-4 border-t">
+            <div className="flex items-center justify-between border-t pt-4">
               <span className="text-lg font-medium">Total</span>
               <span className="text-2xl font-bold">₹{item.totalAmount}</span>
             </div>
@@ -240,21 +242,21 @@ function OrderDetailPage() {
             {item.items?.map((orderItem) => (
               <div
                 key={orderItem.id}
-                className="flex items-center justify-between p-3 bg-muted/50 rounded-lg"
+                className="bg-muted/50 flex items-center justify-between rounded-lg p-3"
               >
                 <div className="flex items-center gap-3">
                   {orderItem.food?.image ? (
                     <img
                       src={orderItem.food.image}
                       alt={orderItem.food?.name}
-                      className="w-12 h-12 rounded object-cover"
+                      className="h-12 w-12 rounded object-cover"
                     />
                   ) : (
-                    <Package className="w-12 h-12 p-2 bg-muted rounded" />
+                    <Package className="bg-muted h-12 w-12 rounded p-2" />
                   )}
                   <div>
                     <p className="font-medium">{orderItem.food?.name}</p>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-muted-foreground text-sm">
                       ₹{orderItem.unitPrice} × {orderItem.quantity}
                     </p>
                   </div>

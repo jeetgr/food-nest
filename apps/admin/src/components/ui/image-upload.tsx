@@ -1,9 +1,10 @@
+import { Upload, X } from "lucide-react";
 import { useCallback } from "react";
 import { useDropzone, type Accept } from "react-dropzone";
-import { Upload, X } from "lucide-react";
 import { toast } from "sonner";
 
 import { cn } from "@/lib/utils";
+
 import { Button } from "./button";
 
 // Image validation constants
@@ -70,10 +71,10 @@ export function ImageUpload({
       data-slot="image-upload"
       className={cn(
         // Boxy design matching input component
-        "relative border border-dashed rounded-none transition-colors cursor-pointer",
+        "relative cursor-pointer rounded-none border border-dashed transition-colors",
         "dark:bg-input/30 border-input",
         isDragActive ? "border-ring bg-ring/5" : "hover:border-ring/50",
-        disabled && "opacity-50 cursor-not-allowed",
+        disabled && "cursor-not-allowed opacity-50",
         className,
       )}
     >
@@ -84,7 +85,7 @@ export function ImageUpload({
           <img
             src={displayPreview}
             alt="Preview"
-            className="w-full h-32 object-cover rounded-none"
+            className="h-32 w-full rounded-none object-cover"
           />
           {!disabled && (
             <Button
@@ -97,24 +98,24 @@ export function ImageUpload({
               <X className="h-3 w-3" />
             </Button>
           )}
-          <p className="text-xs text-center text-muted-foreground mt-2">
+          <p className="text-muted-foreground mt-2 text-center text-xs">
             {isDragActive ? "Drop to replace" : "Click or drag to replace"}
           </p>
         </div>
       ) : (
-        <div className="flex flex-col items-center justify-center py-6 px-4">
+        <div className="flex flex-col items-center justify-center px-4 py-6">
           <Upload
             className={cn(
-              "w-8 h-8 mb-2",
+              "mb-2 h-8 w-8",
               isDragActive ? "text-ring" : "text-muted-foreground",
             )}
           />
-          <p className="text-xs font-medium mb-1">
+          <p className="mb-1 text-xs font-medium">
             {isDragActive
               ? "Drop image here"
               : "Drag & drop or click to upload"}
           </p>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-muted-foreground text-xs">
             PNG, JPEG, WebP • Max 5MB
           </p>
         </div>

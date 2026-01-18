@@ -1,6 +1,8 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { Button } from "./button";
+
 import { cn } from "@/lib/utils";
+
+import { Button } from "./button";
 
 interface PaginationProps {
   page: number;
@@ -32,7 +34,7 @@ export function Pagination({
 
       {pages.map((p, i) =>
         p === "..." ? (
-          <span key={`ellipsis-${i}`} className="px-2 text-muted-foreground">
+          <span key={`ellipsis-${i}`} className="text-muted-foreground px-2">
             ...
           </span>
         ) : (

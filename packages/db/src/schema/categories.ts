@@ -1,5 +1,6 @@
-import { relations } from "drizzle-orm/relations";
 import { pgTable, text, integer, boolean, index } from "drizzle-orm/pg-core";
+import { relations } from "drizzle-orm/relations";
+
 import { primaryId, timestamps } from "./common";
 import { food } from "./foods";
 

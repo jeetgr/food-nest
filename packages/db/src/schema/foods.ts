@@ -7,8 +7,9 @@ import {
   numeric,
   index,
 } from "drizzle-orm/pg-core";
-import { primaryId, timestamps } from "./common";
+
 import { category } from "./categories";
+import { primaryId, timestamps } from "./common";
 import { orderItem } from "./orders";
 
 export const food = pgTable(

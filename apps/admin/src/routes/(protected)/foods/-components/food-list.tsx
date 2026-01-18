@@ -1,12 +1,13 @@
 import { Link } from "@tanstack/react-router";
 import { Package, FolderOpen, Plus } from "lucide-react";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { ImageWithFallback } from "@/components/ui/image-with-fallback";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Switch } from "@/components/ui/switch";
-import { ImageWithFallback } from "@/components/ui/image-with-fallback";
+
 import type { Food } from "./types";
 
 interface FoodListProps {
@@ -35,7 +36,7 @@ export function FoodList({
         {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
           <Card key={i} className="overflow-hidden">
             <Skeleton className="aspect-square w-full" />
-            <div className="p-4 space-y-2">
+            <div className="space-y-2 p-4">
               <Skeleton className="h-5 w-3/4" />
               <Skeleton className="h-4 w-1/2" />
               <Skeleton className="h-4 w-1/4" />
@@ -51,15 +52,15 @@ export function FoodList({
     return (
       <Card>
         <CardContent className="flex flex-col items-center justify-center py-16">
-          <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
-            <FolderOpen className="w-8 h-8 text-muted-foreground" />
+          <div className="bg-muted mb-4 flex h-16 w-16 items-center justify-center rounded-full">
+            <FolderOpen className="text-muted-foreground h-8 w-8" />
           </div>
-          <h3 className="text-lg font-semibold mb-1">No food items yet</h3>
-          <p className="text-muted-foreground text-sm mb-6 text-center max-w-sm">
+          <h3 className="mb-1 text-lg font-semibold">No food items yet</h3>
+          <p className="text-muted-foreground mb-6 max-w-sm text-center text-sm">
             Add your first food item to the menu
           </p>
           <Button onClick={onAddNew} size="lg">
-            <Plus className="w-4 h-4 mr-2" />
+            <Plus className="mr-2 h-4 w-4" />
             Add Food
           </Button>
         </CardContent>
@@ -78,21 +79,21 @@ export function FoodList({
           search={{ from: currentPage, categoryId }}
           className="group block"
         >
-          <Card className="overflow-hidden h-full transition-all duration-200 hover:shadow-lg hover:border-primary/50 hover:-translate-y-0.5 pt-0">
+          <Card className="hover:border-primary/50 h-full overflow-hidden pt-0 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg">
             <div className="relative">
               <ImageWithFallback
                 src={food.image}
                 alt={food.name}
-                className="w-full aspect-square object-cover transition-transform duration-300 group-hover:scale-105"
+                className="aspect-square w-full object-cover transition-transform duration-300 group-hover:scale-105"
                 fallback={
-                  <div className="w-full aspect-square bg-gradient-to-br from-muted to-muted/50 flex items-center justify-center">
-                    <Package className="w-12 h-12 text-muted-foreground/50" />
+                  <div className="from-muted to-muted/50 flex aspect-square w-full items-center justify-center bg-gradient-to-br">
+                    <Package className="text-muted-foreground/50 h-12 w-12" />
                   </div>
                 }
               />
 
               {/* Price badge */}
-              <Badge className="absolute top-3 left-3 rounded-full bg-background/80 backdrop-blur-md text-foreground shadow-sm hover:bg-background/90 px-3 border-none">
+              <Badge className="bg-background/80 text-foreground hover:bg-background/90 absolute top-3 left-3 rounded-full border-none px-3 shadow-sm backdrop-blur-md">
                 ₹{food.price}
               </Badge>
 
@@ -122,32 +123,33 @@ export function FoodList({
             <CardContent className="p-4">
               <div className="flex items-end justify-between gap-2">
                 <div className="min-w-0 flex-1">
-                  <h3 className="font-semibold truncate group-hover:text-primary transition-colors">
+                  <h3 className="group-hover:text-primary truncate font-semibold transition-colors">
                     {food.name}
                   </h3>
-                  <p className="text-sm text-muted-foreground truncate">
+                  <p className="text-muted-foreground truncate text-sm">
                     {food.category?.name}
                   </p>
                 </div>
-                <span className="text-sm text-muted-foreground group-hover:text-primary group-hover:underline transition-colors whitespace-nowrap">
+                <span className="text-muted-foreground group-hover:text-primary text-sm whitespace-nowrap transition-colors group-hover:underline">
                   View →
                 </span>
               </div>
 
               {food.description && (
-                <p className="text-sm text-muted-foreground mt-2 truncate">
+                <p className="text-muted-foreground mt-2 truncate text-sm">
                   {food.description}
                 </p>
               )}
 
-              <div className="flex items-center justify-between mt-3">
+              <div className="mt-3 flex items-center justify-between">
                 <Badge
                   variant={food.stock > 0 ? "secondary" : "destructive"}
                   className="rounded-full font-medium"
                 >
                   {food.stock > 0 ? `${food.stock} in stock` : "Out of stock"}
                 </Badge>
-                <div
+                <button
+                  type="button"
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
@@ -155,11 +157,11 @@ export function FoodList({
                   }}
                   className="flex items-center gap-2"
                 >
-                  <span className="text-xs text-muted-foreground font-medium">
+                  <span className="text-muted-foreground text-xs font-medium">
                     {food.isAvailable ? "Active" : "Inactive"}
                   </span>
                   <Switch checked={food.isAvailable} disabled={isToggling} />
-                </div>
+                </button>
               </div>
             </CardContent>
           </Card>

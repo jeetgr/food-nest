@@ -1,4 +1,3 @@
-import { relations } from "drizzle-orm/relations";
 import {
   pgTable,
   text,
@@ -7,6 +6,8 @@ import {
   index,
   pgEnum,
 } from "drizzle-orm/pg-core";
+import { relations } from "drizzle-orm/relations";
+
 import { address } from "./addresses";
 import { order } from "./orders";
 

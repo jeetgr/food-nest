@@ -1,17 +1,17 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft, Edit2, UtensilsCrossed } from "lucide-react";
 import { useState } from "react";
 import z from "zod";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ImageWithFallback } from "@/components/ui/image-with-fallback";
 import { Skeleton } from "@/components/ui/skeleton";
 import { orpc } from "@/utils/orpc";
 
 import { CategoryDialog } from "./-components/category-dialog";
-import { ImageWithFallback } from "@/components/ui/image-with-fallback";
 
 export const Route = createFileRoute("/(protected)/categories/$categoryId")({
   component: CategoryDetailPage,
@@ -43,7 +43,7 @@ function CategoryDetailPage() {
     orpc.categories.update.mutationOptions({
       onSuccess: () => {
         setIsEditing(false);
-        queryClient.invalidateQueries({
+        void queryClient.invalidateQueries({
           queryKey: orpc.categories.getById.key({ input: { id: categoryId } }),
         });
       },
@@ -55,7 +55,7 @@ function CategoryDetailPage() {
   );
 
   const goBack = () => {
-    navigate({
+    void navigate({
       to: "/categories",
       search: { page: from || 1 },
     });
@@ -82,11 +82,11 @@ function CategoryDetailPage() {
     return (
       <div className="space-y-6">
         <Button variant="ghost" onClick={goBack}>
-          <ArrowLeft className="w-4 h-4 mr-2" />
+          <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Categories
         </Button>
         <Card>
-          <CardContent className="py-12 text-center text-muted-foreground">
+          <CardContent className="text-muted-foreground py-12 text-center">
             Category not found
           </CardContent>
         </Card>
@@ -102,7 +102,7 @@ function CategoryDetailPage() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Button variant="ghost" size="icon" onClick={goBack}>
-            <ArrowLeft className="w-5 h-5" />
+            <ArrowLeft className="h-5 w-5" />
           </Button>
           <div>
             <h1 className="text-3xl font-bold">{item.name}</h1>
@@ -111,7 +111,7 @@ function CategoryDetailPage() {
         </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" onClick={() => setIsEditing(true)}>
-            <Edit2 className="w-4 h-4 mr-2" />
+            <Edit2 className="mr-2 h-4 w-4" />
             Edit
           </Button>
           <Button
@@ -154,10 +154,10 @@ function CategoryDetailPage() {
             <ImageWithFallback
               src={item.image}
               alt={item.name}
-              className="w-full aspect-square object-cover"
+              className="aspect-square w-full object-cover"
               fallback={
-                <div className="w-full aspect-square bg-muted flex items-center justify-center">
-                  <UtensilsCrossed className="w-16 h-16 text-muted-foreground" />
+                <div className="bg-muted flex aspect-square w-full items-center justify-center">
+                  <UtensilsCrossed className="text-muted-foreground h-16 w-16" />
                 </div>
               }
             />
@@ -170,17 +170,17 @@ function CategoryDetailPage() {
             <CardTitle>Details</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="flex items-center justify-between py-2 border-b">
+            <div className="flex items-center justify-between border-b py-2">
               <span className="text-muted-foreground">Status</span>
               <Badge variant={item.isActive ? "default" : "secondary"}>
                 {item.isActive ? "Active" : "Inactive"}
               </Badge>
             </div>
-            <div className="flex items-center justify-between py-2 border-b">
+            <div className="flex items-center justify-between border-b py-2">
               <span className="text-muted-foreground">Sort Order</span>
               <span className="font-medium">{item.sortOrder}</span>
             </div>
-            <div className="flex items-center justify-between py-2 border-b">
+            <div className="flex items-center justify-between border-b py-2">
               <span className="text-muted-foreground">Created</span>
               <span className="font-medium">
                 {new Date(item.createdAt).toLocaleDateString("en-IN", {
@@ -206,7 +206,7 @@ function CategoryDetailPage() {
           <div className="flex items-center justify-between">
             <div>
               <p className="font-medium">View Foods in this Category</p>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-muted-foreground text-sm">
                 See all food items under {item.name}
               </p>
             </div>

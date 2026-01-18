@@ -1,4 +1,3 @@
-import { useState, useRef, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import {
@@ -11,12 +10,15 @@ import {
   X,
   Loader2,
 } from "lucide-react";
-import { ModeToggle } from "./mode-toggle";
-import UserMenu from "./user-menu";
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
+import { useState, useRef, useEffect } from "react";
+
 import { useSidebarStore } from "@/stores/sidebar";
 import { orpc } from "@/utils/orpc";
+
+import { ModeToggle } from "./mode-toggle";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import UserMenu from "./user-menu";
 
 export function TopNav() {
   const openMobile = useSidebarStore((s) => s.openMobile);
@@ -60,11 +62,14 @@ export function TopNav() {
     setIsOpen(false);
 
     if (type === "food") {
-      navigate({ to: "/foods/$foodId", params: { foodId: id } });
+      void navigate({ to: "/foods/$foodId", params: { foodId: id } });
     } else if (type === "category") {
-      navigate({ to: "/categories/$categoryId", params: { categoryId: id } });
+      void navigate({
+        to: "/categories/$categoryId",
+        params: { categoryId: id },
+      });
     } else if (type === "order") {
-      navigate({ to: "/orders/$orderId", params: { orderId: id } });
+      void navigate({ to: "/orders/$orderId", params: { orderId: id } });
     }
   };
 
@@ -75,7 +80,7 @@ export function TopNav() {
       searchResults.data.orders.length > 0);
 
   return (
-    <header className="sticky top-0 z-30 h-16 bg-background border-b flex items-center justify-between px-4 lg:px-6">
+    <header className="bg-background sticky top-0 z-30 flex h-16 items-center justify-between border-b px-4 lg:px-6">
       <div className="flex items-center gap-4">
         <Button
           variant="ghost"
@@ -83,16 +88,16 @@ export function TopNav() {
           onClick={openMobile}
           className="lg:hidden"
         >
-          <Menu className="w-5 h-5" />
+          <Menu className="h-5 w-5" />
         </Button>
 
         {/* Search */}
-        <div className="hidden md:flex items-center" ref={searchRef}>
+        <div className="hidden items-center md:flex" ref={searchRef}>
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
             <Input
               placeholder="Search foods, categories, orders..."
-              className="w-80 pl-9 pr-8 h-9"
+              className="h-9 w-80 pr-8 pl-9"
               value={searchQuery}
               onChange={(e) => {
                 setSearchQuery(e.target.value);
@@ -102,49 +107,51 @@ export function TopNav() {
             />
             {searchQuery && (
               <button
+                type="button"
                 onClick={() => {
                   setSearchQuery("");
                   setIsOpen(false);
                 }}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                className="text-muted-foreground hover:text-foreground absolute top-1/2 right-3 -translate-y-1/2"
               >
-                <X className="w-4 h-4" />
+                <X className="h-4 w-4" />
               </button>
             )}
 
             {/* Search Results Dropdown */}
             {isOpen && searchQuery && (
-              <div className="absolute top-full left-0 right-0 mt-1 bg-popover border rounded-md shadow-lg max-h-96 overflow-auto z-50">
+              <div className="bg-popover absolute top-full right-0 left-0 z-50 mt-1 max-h-96 overflow-auto rounded-md border shadow-lg">
                 {searchResults.isLoading ? (
                   <div className="flex items-center justify-center py-8">
-                    <Loader2 className="w-5 h-5 animate-spin text-muted-foreground" />
+                    <Loader2 className="text-muted-foreground h-5 w-5 animate-spin" />
                   </div>
                 ) : hasResults ? (
                   <div className="py-1">
                     {/* Foods */}
                     {searchResults.data?.foods.length ? (
                       <div>
-                        <div className="px-3 py-2 text-xs font-medium text-muted-foreground uppercase">
+                        <div className="text-muted-foreground px-3 py-2 text-xs font-medium uppercase">
                           Foods
                         </div>
                         {searchResults.data.foods.map((item) => (
                           <button
+                            type="button"
                             key={item.id}
                             onClick={() => handleSelect("food", item.id)}
-                            className="w-full flex items-center gap-3 px-3 py-2 hover:bg-accent text-left"
+                            className="hover:bg-accent flex w-full items-center gap-3 px-3 py-2 text-left"
                           >
                             {item.image ? (
                               <img
                                 src={item.image}
                                 alt={item.name}
-                                className="w-8 h-8 rounded object-cover"
+                                className="h-8 w-8 rounded object-cover"
                               />
                             ) : (
-                              <Package className="w-8 h-8 p-1.5 bg-muted rounded" />
+                              <Package className="bg-muted h-8 w-8 rounded p-1.5" />
                             )}
                             <div>
                               <p className="text-sm font-medium">{item.name}</p>
-                              <p className="text-xs text-muted-foreground">
+                              <p className="text-muted-foreground text-xs">
                                 {item.category}
                               </p>
                             </div>
@@ -156,23 +163,24 @@ export function TopNav() {
                     {/* Categories */}
                     {searchResults.data?.categories.length ? (
                       <div>
-                        <div className="px-3 py-2 text-xs font-medium text-muted-foreground uppercase">
+                        <div className="text-muted-foreground px-3 py-2 text-xs font-medium uppercase">
                           Categories
                         </div>
                         {searchResults.data.categories.map((item) => (
                           <button
+                            type="button"
                             key={item.id}
                             onClick={() => handleSelect("category", item.id)}
-                            className="w-full flex items-center gap-3 px-3 py-2 hover:bg-accent text-left"
+                            className="hover:bg-accent flex w-full items-center gap-3 px-3 py-2 text-left"
                           >
                             {item.image ? (
                               <img
                                 src={item.image}
                                 alt={item.name}
-                                className="w-8 h-8 rounded object-cover"
+                                className="h-8 w-8 rounded object-cover"
                               />
                             ) : (
-                              <UtensilsCrossed className="w-8 h-8 p-1.5 bg-muted rounded" />
+                              <UtensilsCrossed className="bg-muted h-8 w-8 rounded p-1.5" />
                             )}
                             <p className="text-sm font-medium">{item.name}</p>
                           </button>
@@ -183,21 +191,22 @@ export function TopNav() {
                     {/* Orders */}
                     {searchResults.data?.orders.length ? (
                       <div>
-                        <div className="px-3 py-2 text-xs font-medium text-muted-foreground uppercase">
+                        <div className="text-muted-foreground px-3 py-2 text-xs font-medium uppercase">
                           Orders
                         </div>
                         {searchResults.data.orders.map((item) => (
                           <button
+                            type="button"
                             key={item.id}
                             onClick={() => handleSelect("order", item.id)}
-                            className="w-full flex items-center gap-3 px-3 py-2 hover:bg-accent text-left"
+                            className="hover:bg-accent flex w-full items-center gap-3 px-3 py-2 text-left"
                           >
-                            <ShoppingCart className="w-8 h-8 p-1.5 bg-muted rounded" />
+                            <ShoppingCart className="bg-muted h-8 w-8 rounded p-1.5" />
                             <div>
                               <p className="text-sm font-medium">
                                 #{item.id.slice(-8).toUpperCase()}
                               </p>
-                              <p className="text-xs text-muted-foreground">
+                              <p className="text-muted-foreground text-xs">
                                 {item.userName} • ₹{item.totalAmount}
                               </p>
                             </div>
@@ -207,7 +216,7 @@ export function TopNav() {
                     ) : null}
                   </div>
                 ) : (
-                  <div className="py-8 text-center text-sm text-muted-foreground">
+                  <div className="text-muted-foreground py-8 text-center text-sm">
                     No results found for "{searchQuery}"
                   </div>
                 )}
@@ -220,8 +229,8 @@ export function TopNav() {
       <div className="flex items-center gap-2">
         {/* Notifications */}
         <Button variant="ghost" size="icon" className="relative">
-          <Bell className="w-5 h-5" />
-          <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full" />
+          <Bell className="h-5 w-5" />
+          <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-red-500" />
         </Button>
 
         <ModeToggle />

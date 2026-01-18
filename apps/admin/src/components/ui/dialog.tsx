@@ -1,5 +1,6 @@
-import * as React from "react";
 import { X } from "lucide-react";
+import * as React from "react";
+
 import { cn } from "@/lib/utils";
 
 interface DialogContextValue {
@@ -53,7 +54,11 @@ function DialogTrigger({ asChild, children }: DialogTriggerProps) {
     );
   }
 
-  return <button onClick={() => onOpenChange(true)}>{children}</button>;
+  return (
+    <button type="button" onClick={() => onOpenChange(true)}>
+      {children}
+    </button>
+  );
 }
 
 interface DialogContentProps {
@@ -70,17 +75,18 @@ function DialogContent({ children, className }: DialogContentProps) {
     <div className="fixed inset-0 z-50">
       <div
         className="fixed inset-0 bg-black/80"
-        onClick={() => onOpenChange(false)}
+        onPointerDown={() => onOpenChange(false)}
       />
       <div
         className={cn(
-          "fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg sm:rounded-lg",
+          "bg-background fixed top-[50%] left-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border p-6 shadow-lg sm:rounded-lg",
           className,
         )}
       >
         {children}
         <button
-          className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+          type="button"
+          className="ring-offset-background focus:ring-ring absolute top-4 right-4 rounded-sm opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 focus:outline-none"
           onClick={() => onOpenChange(false)}
         >
           <X className="h-4 w-4" />
@@ -123,16 +129,19 @@ function DialogFooter({
 
 function DialogTitle({
   className,
+  children,
   ...props
 }: React.HTMLAttributes<HTMLHeadingElement>) {
   return (
     <h2
       className={cn(
-        "text-lg font-semibold leading-none tracking-tight",
+        "text-lg leading-none font-semibold tracking-tight",
         className,
       )}
       {...props}
-    />
+    >
+      {children}
+    </h2>
   );
 }
 
@@ -141,7 +150,7 @@ function DialogDescription({
   ...props
 }: React.HTMLAttributes<HTMLParagraphElement>) {
   return (
-    <p className={cn("text-sm text-muted-foreground", className)} {...props} />
+    <p className={cn("text-muted-foreground text-sm", className)} {...props} />
   );
 }
 

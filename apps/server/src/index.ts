@@ -44,11 +44,10 @@ const rpcHandler = new RPCHandler(appRouter, {
 new Elysia()
   .use(
     cors({
-      // origin: [env.CORS_ORIGIN, "mybettertapp://", "exp://"],
-      // methods: ["GET", "POST", "OPTIONS"],
-      // allowedHeaders: ["Content-Type", "Authorization"],
-      // credentials: true,
-      origin: "*",
+      origin: [env.CORS_ORIGIN, "mybettertapp://", "exp://"],
+      methods: ["GET", "POST", "OPTIONS"],
+      allowedHeaders: ["Content-Type", "Authorization"],
+      credentials: true,
     }),
   )
   .use(

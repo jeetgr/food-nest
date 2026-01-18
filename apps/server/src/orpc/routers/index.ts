@@ -8,7 +8,8 @@ import { foodsRouter } from "./foods";
 import { ordersRouter } from "./orders";
 
 export const appRouter = {
-  healthCheck: publicProcedure.route({ method: "GET" }).handler(() => {
+  healthCheck: publicProcedure.handler(() => {
+    console.log("Health check");
     return "OK";
   }),
 

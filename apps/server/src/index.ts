@@ -44,10 +44,11 @@ const rpcHandler = new RPCHandler(appRouter, {
 new Elysia()
   .use(
     cors({
-      origin: env.CORS_ORIGIN,
-      methods: ["GET", "POST", "OPTIONS"],
-      allowedHeaders: ["Content-Type", "Authorization"],
-      credentials: true,
+      // origin: [env.CORS_ORIGIN, "mybettertapp://", "exp://"],
+      // methods: ["GET", "POST", "OPTIONS"],
+      // allowedHeaders: ["Content-Type", "Authorization"],
+      // credentials: true,
+      origin: "*",
     }),
   )
   .use(
@@ -71,6 +72,6 @@ new Elysia()
     return response ?? new Response("Not Found", { status: 404 });
   })
   .get("/", () => "OK")
-  .listen(3000, () => {
-    console.log("Server is running on http://localhost:3000");
+  .listen({ port: 3000, hostname: "0.0.0.0" }, () => {
+    console.log("Server is running on http://0.0.0.0:3000");
   });

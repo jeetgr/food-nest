@@ -1,4 +1,9 @@
-import { DarkTheme, DefaultTheme, type Theme, ThemeProvider } from "@react-navigation/native";
+import {
+  DarkTheme,
+  DefaultTheme,
+  type Theme,
+  ThemeProvider,
+} from "@react-navigation/native";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -9,7 +14,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { setAndroidNavigationBar } from "@/lib/android-navigation-bar";
 import { NAV_THEME } from "@/lib/constants";
 import { useColorScheme } from "@/lib/use-color-scheme";
-import { queryClient } from "@/utils/orpc";
+import { queryClient } from "@/utils/tanstack-query";
 
 const LIGHT_THEME: Theme = {
   ...DefaultTheme,
@@ -25,7 +30,9 @@ export const unstable_settings = {
 };
 
 const useIsomorphicLayoutEffect =
-  Platform.OS === "web" && typeof window === "undefined" ? React.useEffect : React.useLayoutEffect;
+  Platform.OS === "web" && typeof window === "undefined"
+    ? React.useEffect
+    : React.useLayoutEffect;
 
 const styles = StyleSheet.create({
   container: {
@@ -59,7 +66,10 @@ export default function RootLayout() {
           <GestureHandlerRootView style={styles.container}>
             <Stack>
               <Stack.Screen name="(drawer)" options={{ headerShown: false }} />
-              <Stack.Screen name="modal" options={{ title: "Modal", presentation: "modal" }} />
+              <Stack.Screen
+                name="modal"
+                options={{ title: "Modal", presentation: "modal" }}
+              />
             </Stack>
           </GestureHandlerRootView>
         </ThemeProvider>

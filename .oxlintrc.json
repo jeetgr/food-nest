@@ -1,5 +1,17 @@
 {
-  "plugins": ["unicorn", "typescript", "oxc"],
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": [
+    "eslint",
+    "typescript",
+    "unicorn",
+    "oxc",
+    "react",
+    "react-perf",
+    "import",
+    "jsx-a11y",
+    "node",
+    "promise"
+  ],
   "categories": {},
   "rules": {
     "constructor-super": "warn",
@@ -105,7 +117,8 @@
     "unicorn/no-useless-length-check": "warn",
     "unicorn/no-useless-spread": "warn",
     "unicorn/prefer-set-size": "warn",
-    "unicorn/prefer-string-starts-ends-with": "warn"
+    "unicorn/prefer-string-starts-ends-with": "warn",
+    "react/button-has-type": "warn"
   },
   "settings": {
     "jsx-a11y": {

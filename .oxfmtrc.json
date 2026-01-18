@@ -1,4 +1,22 @@
 {
-  "ignorePatterns": [],
-  "printWidth": 80
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "printWidth": 80,
+  "experimentalSortImports": {},
+  "experimentalTailwindcss": {
+    // "stylesheet": "./apps/admin/src/index.css",
+    "attributes": [
+      "class",
+      "className"
+    ],
+    "functions": [
+      "clsx",
+      "cn"
+    ],
+    "preserveDuplicates": false,
+    "preserveWhitespace": false
+  },
+  "ignorePatterns": [
+    "migrations",
+    "routeTree.gen.ts"
+  ]
 }

@@ -22,6 +22,10 @@
   },
   "type": "module",
   "scripts": {
+    "lint": "oxlint --type-aware --type-check",
+    "lint:fix": "oxlint --fix --type-aware",
+    "format": "oxfmt",
+    "format:check": "oxfmt --check",
     "dev": "turbo dev",
     "build": "turbo build",
     "check-types": "turbo check-types",
@@ -46,8 +50,9 @@
   "devDependencies": {
     "@foodnest/config": "workspace:*",
     "@types/bun": "catalog:",
-    "oxfmt": "^0.19.0",
-    "oxlint": "^1.34.0",
+    "oxfmt": "^0.24.0",
+    "oxlint": "^1.39.0",
+    "oxlint-tsgolint": "^0.11.1",
     "turbo": "^2.6.3",
     "typescript": "catalog:"
   },

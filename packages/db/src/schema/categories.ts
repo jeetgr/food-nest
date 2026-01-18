@@ -18,6 +18,7 @@ export const category = pgTable(
   (table) => [
     index("category_slug_idx").on(table.slug),
     index("category_is_active_idx").on(table.isActive),
+    index("category_deleted_at_idx").on(table.deletedAt),
   ],
 );
 

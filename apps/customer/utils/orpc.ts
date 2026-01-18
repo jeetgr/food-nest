@@ -31,7 +31,7 @@ export const link = new RPCLink({
     }
     return Object.fromEntries(headers);
   },
-    fetch(url, options) {
+  fetch(url, options) {
     return fetch(url, {
       ...options,
       credentials: "include",

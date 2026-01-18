@@ -1,7 +1,7 @@
 import { db } from "@foodnest/db";
 import { category } from "@foodnest/db/schema/categories";
 import { ORPCError } from "@orpc/server";
-import { eq, asc } from "drizzle-orm";
+import { eq, asc, isNull, and } from "drizzle-orm";
 import { z } from "zod";
 
 import { publicProcedure, adminProcedure } from "../index";
@@ -44,13 +44,13 @@ export const categoriesRouter = {
 
       // Build where clause - only filter by isActive if NOT including inactive
       const whereClause = includeInactive
-        ? undefined
-        : eq(category.isActive, true);
+        ? isNull(category.deletedAt)
+        : and(eq(category.isActive, true), isNull(category.deletedAt));
 
       // If all=true, return everything active (for dropdowns)
       if (all) {
         const items = await db.query.category.findMany({
-          where: eq(category.isActive, true), // Dropdowns always only show active
+          where: and(eq(category.isActive, true), isNull(category.deletedAt)), // Dropdowns always only show active
           orderBy: [asc(category.sortOrder), asc(category.name)],
         });
         return {
@@ -89,7 +89,7 @@ export const categoriesRouter = {
     .input(z.object({ slug: z.string() }))
     .handler(async ({ input }) => {
       const result = await db.query.category.findFirst({
-        where: eq(category.slug, input.slug),
+        where: and(eq(category.slug, input.slug), isNull(category.deletedAt)),
         with: {
           foods: {
             where: (food, { eq }) => eq(food.isAvailable, true),
@@ -109,7 +109,7 @@ export const categoriesRouter = {
     .input(z.object({ id: z.string() }))
     .handler(async ({ input }) => {
       const result = await db.query.category.findFirst({
-        where: eq(category.id, input.id),
+        where: and(eq(category.id, input.id), isNull(category.deletedAt)),
       });
 
       if (!result) {
@@ -249,13 +249,12 @@ export const categoriesRouter = {
         throw new ORPCError("NOT_FOUND", { message: "Category not found" });
       }
 
-      // Delete image from storage
-      if (existing.image) {
-        await localStorageProvider.delete(existing.image);
-      }
+      const [updated] = await db
+        .update(category)
+        .set({ deletedAt: new Date() })
+        .where(eq(category.id, input.id))
+        .returning();
 
-      await db.delete(category).where(eq(category.id, input.id));
-
-      return { success: true };
+      return { success: !!updated };
     }),
 };

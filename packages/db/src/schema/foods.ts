@@ -32,6 +32,7 @@ export const food = pgTable(
     index("food_slug_idx").on(table.slug),
     index("food_category_id_idx").on(table.categoryId),
     index("food_is_available_idx").on(table.isAvailable),
+    index("food_deleted_at_idx").on(table.deletedAt),
   ],
 );
 

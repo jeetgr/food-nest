@@ -24,6 +24,7 @@ export const address = pgTable(
   (table) => [
     index("address_user_id_idx").on(table.userId),
     index("address_is_default_idx").on(table.isDefault),
+    index("address_deleted_at_idx").on(table.deletedAt),
   ],
 );
 

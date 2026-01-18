@@ -2,6 +2,7 @@ import type { RouterClient } from "@orpc/server";
 
 import { publicProcedure } from "../index";
 import { addressesRouter } from "./addresses";
+import { cartRouter } from "./cart";
 import { categoriesRouter } from "./categories";
 import { dashboardRouter } from "./dashboard";
 import { foodsRouter } from "./foods";
@@ -15,6 +16,7 @@ export const appRouter = {
 
   // Domain routers
   dashboard: dashboardRouter,
+  cart: cartRouter,
   categories: categoriesRouter,
   foods: foodsRouter,
   addresses: addressesRouter,

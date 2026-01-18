@@ -5,7 +5,7 @@ import {
   QueryClient,
   type QueryKey,
 } from "@tanstack/react-query";
-import { Alert } from "react-native";
+import { toast } from "sonner-native";
 
 import type { ORPCClientError } from "./orpc";
 
@@ -34,7 +34,9 @@ export const queryClient = new QueryClient({
     onSuccess: (data, _vars, _ctx, mutation) => {
       // Show success message if configured
       if (mutation.meta?.successMessage && mutation.meta?.showSuccessAlert) {
-        Alert.alert("Success", mutation.meta.successMessage);
+        toast.success("Success", {
+          description: mutation.meta.successMessage,
+        });
       }
 
       // Auto-show message from response data
@@ -45,17 +47,13 @@ export const queryClient = new QueryClient({
         typeof data.message === "string" &&
         mutation.meta?.showSuccessAlert
       ) {
-        Alert.alert("Success", data.message);
+        toast.success("Success", {
+          description: data.message,
+        });
       }
     },
 
     onError: (_error, _vars, _ctx, mutation) => {
-      // Custom error message from meta
-      if (mutation.meta?.errorMessage) {
-        Alert.alert("Error", mutation.meta.errorMessage);
-        return;
-      }
-
       // Handle oRPC validation errors
       if (
         isDefinedError<ORPCClientError>(_error) &&
@@ -67,18 +65,24 @@ export const queryClient = new QueryClient({
           ? formErrors
           : Object.values(fieldErrors).flat().filter(Boolean);
 
-        Alert.alert("Validation Error", messages.join("\n"));
+        toast.error("Validation Error", {
+          description: messages.join("\n"),
+        });
         return;
       }
 
-      // Skip 401 errors (handled by auth flow)
-      // @ts-expect-error - status may exist on error
-      if (_error?.status === 401) {
+      // Custom error message from meta
+      if (mutation.meta?.errorMessage) {
+        toast.error("Error", {
+          description: mutation.meta.errorMessage,
+        });
         return;
       }
 
       // Generic error
-      Alert.alert("Error", _error.message ?? "Something went wrong");
+      toast.error("Error", {
+        description: _error.message ?? "Something went wrong",
+      });
     },
 
     onSettled: (_data, _error, _vars, _ctx, mutation) => {

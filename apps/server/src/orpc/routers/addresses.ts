@@ -1,7 +1,7 @@
 import { db } from "@foodnest/db";
 import { address } from "@foodnest/db/schema/addresses";
 import { ORPCError } from "@orpc/client";
-import { eq, and } from "drizzle-orm";
+import { eq, and, isNull } from "drizzle-orm";
 import { z } from "zod";
 
 import { protectedProcedure } from "../index";
@@ -22,7 +22,7 @@ export const addressesRouter = {
     .handler(async ({ context }) => {
       const userId = context.session.user.id;
       return db.query.address.findMany({
-        where: eq(address.userId, userId),
+        where: and(eq(address.userId, userId), isNull(address.deletedAt)),
       });
     }),
 
@@ -54,7 +54,11 @@ export const addressesRouter = {
 
       // Verify ownership
       const existing = await db.query.address.findFirst({
-        where: and(eq(address.id, input.id), eq(address.userId, userId)),
+        where: and(
+          eq(address.id, input.id),
+          eq(address.userId, userId),
+          isNull(address.deletedAt),
+        ),
       });
 
       if (!existing) {
@@ -85,14 +89,21 @@ export const addressesRouter = {
 
       // Verify ownership
       const existing = await db.query.address.findFirst({
-        where: and(eq(address.id, input.id), eq(address.userId, userId)),
+        where: and(
+          eq(address.id, input.id),
+          eq(address.userId, userId),
+          isNull(address.deletedAt),
+        ),
       });
 
       if (!existing) {
         throw new ORPCError("NOT_FOUND", { message: "Address not found" });
       }
 
-      await db.delete(address).where(eq(address.id, input.id));
+      await db
+        .update(address)
+        .set({ deletedAt: new Date() })
+        .where(eq(address.id, input.id));
       return { success: true };
     }),
 
@@ -111,7 +122,13 @@ export const addressesRouter = {
       const [updated] = await db
         .update(address)
         .set({ isDefault: true })
-        .where(and(eq(address.id, input.id), eq(address.userId, userId)))
+        .where(
+          and(
+            eq(address.id, input.id),
+            eq(address.userId, userId),
+            isNull(address.deletedAt),
+          ),
+        )
         .returning();
 
       return updated;

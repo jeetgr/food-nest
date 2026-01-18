@@ -1,7 +1,7 @@
 import { db } from "@foodnest/db";
 import { food } from "@foodnest/db/schema/foods";
 import { ORPCError } from "@orpc/server";
-import { eq, and, asc } from "drizzle-orm";
+import { eq, and, asc, isNull, ilike } from "drizzle-orm";
 import { z } from "zod";
 
 import { adminProcedure, publicProcedure } from "../index";
@@ -43,14 +43,15 @@ export const foodsRouter = {
     .input(
       z.object({
         categoryId: z.string().optional(),
+        query: z.string().optional(),
         onlyAvailable: z.boolean().default(true),
         page: z.number().int().min(1).default(1),
         limit: z.number().int().min(1).max(100).default(12),
       }),
     )
     .handler(async ({ input }) => {
-      const { categoryId, onlyAvailable, page, limit } = input;
-      const conditions = [];
+      const { categoryId, query, onlyAvailable, page, limit } = input;
+      const conditions = [isNull(food.deletedAt)];
 
       if (onlyAvailable) {
         conditions.push(eq(food.isAvailable, true));
@@ -58,9 +59,11 @@ export const foodsRouter = {
       if (categoryId && categoryId !== "all") {
         conditions.push(eq(food.categoryId, categoryId));
       }
+      if (query) {
+        conditions.push(ilike(food.name, `%${query}%`));
+      }
 
-      const whereClause =
-        conditions.length > 0 ? and(...conditions) : undefined;
+      const whereClause = and(...conditions);
 
       const offset = (page - 1) * limit;
 
@@ -90,7 +93,7 @@ export const foodsRouter = {
     .input(z.object({ slug: z.string() }))
     .handler(async ({ input }) => {
       const result = await db.query.food.findFirst({
-        where: eq(food.slug, input.slug),
+        where: and(eq(food.slug, input.slug), isNull(food.deletedAt)),
         with: { category: true },
       });
 
@@ -106,7 +109,7 @@ export const foodsRouter = {
     .input(z.object({ id: z.string() }))
     .handler(async ({ input }) => {
       const result = await db.query.food.findFirst({
-        where: eq(food.id, input.id),
+        where: and(eq(food.id, input.id), isNull(food.deletedAt)),
         with: { category: true },
       });
 
@@ -275,13 +278,12 @@ export const foodsRouter = {
         throw new ORPCError("NOT_FOUND", { message: "Food not found" });
       }
 
-      // Delete image from storage
-      if (existing.image) {
-        await localStorageProvider.delete(existing.image);
-      }
+      const [updated] = await db
+        .update(food)
+        .set({ deletedAt: new Date() })
+        .where(eq(food.id, input.id))
+        .returning();
 
-      await db.delete(food).where(eq(food.id, input.id));
-
-      return { success: true };
+      return { success: !!updated };
     }),
 };

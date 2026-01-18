@@ -15,6 +15,20 @@
       "when": 1768644386304,
       "tag": "0001_cloudy_madripoor",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1768736041559,
+      "tag": "0002_thin_charles_xavier",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1768737310012,
+      "tag": "0003_luxuriant_invaders",
+      "breakpoints": true
     }
   ]
 }

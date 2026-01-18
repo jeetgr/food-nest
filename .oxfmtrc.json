@@ -4,19 +4,10 @@
   "experimentalSortImports": {},
   "experimentalTailwindcss": {
     // "stylesheet": "./apps/admin/src/index.css",
-    "attributes": [
-      "class",
-      "className"
-    ],
-    "functions": [
-      "clsx",
-      "cn"
-    ],
+    "attributes": ["class", "className"],
+    "functions": ["clsx", "cn"],
     "preserveDuplicates": false,
     "preserveWhitespace": false
   },
-  "ignorePatterns": [
-    "migrations",
-    "routeTree.gen.ts"
-  ]
+  "ignorePatterns": ["migrations", "routeTree.gen.ts"]
 }

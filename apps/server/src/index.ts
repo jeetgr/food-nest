@@ -44,7 +44,7 @@ const rpcHandler = new RPCHandler(appRouter, {
 new Elysia()
   .use(
     cors({
-      origin: [env.CORS_ORIGIN, "mybettertapp://", "exp://"],
+      origin: [env.CORS_ORIGIN, "foodnest://", "exp://"],
       methods: ["GET", "POST", "OPTIONS"],
       allowedHeaders: ["Content-Type", "Authorization"],
       credentials: true,
